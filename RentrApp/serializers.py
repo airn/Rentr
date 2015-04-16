@@ -2,6 +2,7 @@ from rest_framework import serializers
 from RentrApp.models import Rentable, Store, Rental
 
 class RentableSerializer(serializers.ModelSerializer):
+    store = StoreSerializer()
     class Meta:
         model = Rentable
         fields = ('store', 'type', 'isRented', 'dateRented', 'dateDue', 'dateReturned')
