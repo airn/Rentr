@@ -3,15 +3,15 @@ from RentrApp.models import Rentable, Store, Rental
 
 class RentableSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Rentable
+        model = Rentable
         fields = ('store', 'type', 'isRented', 'dateRented', 'dateDue', 'dateReturned')
 
 class StoreSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Store
+        model = Store
         fields = ('pk', 'name', 'address', 'phoneNum')
 
 class RentalSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.Rental
+        model = Rental
         fields = ('cusName', 'cusPhoneNum', 'cusEmail', 'price', 'rentable')
