@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from RentrApp import models
 from RentrApp.models import Rentable, Store, Rental
 
 class RentableSerializer(serializers.ModelSerializer):
