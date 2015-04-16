@@ -11,7 +11,8 @@ class Rentable(models.Model):
     dateDue = models.DateTimeField(null=True)
     dateReturned = models.DateTimeField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
-    store = models.ForeignKey('Store', null=True)
+    # default is primary key; can specify store name with (... to_field='name')
+    store = models.ForeignKey('Store')
 
     def __str__(self):
         return self.type
@@ -29,6 +30,7 @@ class Store(models.Model):
 class Rental(models.Model):
     cusName = models.CharField(max_length=MAX_SIZE,default='Default Customer Name')
     cusPhoneNum = models.CharField(max_length=MAX_SIZE,default='Default Customer Phone Number')
+    # we should try changing this models.EmailField(...) once bugs are violently silenced
     cusEmail = models.CharField(max_length=MAX_SIZE,default='Default Customer Email')
     price = models.FloatField(default=0.00)
     rentable = models.ForeignKey('Rentable', null=True)
