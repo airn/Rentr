@@ -1,20 +1,20 @@
 from django.http import Http404
-from RentrApp.models import Rentable, Store
-from RentrApp.serializers import RentableSerializer, StoreSerializer
+from RentrApp.models import Rentable, Store, Rental
+from RentrApp.serializers import RentableSerializer, StoreSerializer, RentalSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 # Create your views here.
 
-# Rental List
+# Rentable List
 class RentableList(APIView):
 
     # Returns a list of rentables
     def get(self, request, format='json'):
-        store = request.GET.get('store')
+        store = request.query_params['store']
         if store != None:
-            rentals = Rentable.objects.all(store=store)
+            rentals = Rentable.objects.filter(store=store)
         else:
             rentals = Rentable.objects.all()
         serializer = RentableSerializer(rentals, many=True)
@@ -30,8 +30,6 @@ class RentableList(APIView):
 
 class RentableDetail(APIView):
 
-    # If object dosen't exsist throw a 404
-    # Passes the rentable to the get function
     def get_object(self, pk, format='json'):
         try:
             return Rentable.objects.get(pk=pk)
@@ -66,14 +64,7 @@ class StoreDetail(APIView):
         serializer = StoreSerializer(store)
         return Response(serializer.data)
 
-    def post(self, request, format='json'):
-        serializer = StoreSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # Store List
+    #  Store List
 class StoreList(APIView):
 
     # Returns a list of stores
@@ -81,3 +72,49 @@ class StoreList(APIView):
         stores = Store.objects.all()
         serializer = StoreSerializer(stores, many=True)
         return Response(serializer.data)
+
+    def post(self, request, format='json'):
+        serializer = StoreSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class RentalList(APIView):
+
+    # Returns a list of rentals
+    def get(self, request, format='json'):
+        rentals = Rental.objects.all()
+        serializer = RentalSerializer(rentals, many=True)
+        return Response(serializer.data)
+
+    # Creates a new rental
+    def post(self, request, format='json'):
+        serializer = RentalSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class RentalDetail(APIView):
+
+    def get_object(self, pk, format='json'):
+        try:
+            return Rental.objects.get(pk=pk)
+        except Rental.DoesNotExist:
+            raise Http404
+
+    # Serializes the rental and returns the individual rental
+    def get(self, request, pk, format='json'):
+        rental = self.get_object(pk)
+        serializer = RentalSerializer(rental)
+        return Response(serializer.data)
+
+    # Updates the rental Object when POST request
+    def post(self, request, pk, format='json'):
+        rental = self.get_object(pk)
+        serializer = RentalSerializer(rental, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
