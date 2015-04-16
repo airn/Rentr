@@ -11,7 +11,7 @@ class Rentable(models.Model):
     dateDue = models.DateTimeField(null=True)
     dateReturned = models.DateTimeField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
-    store = models.ForeignKey('Store', null-True)
+    store = models.ForeignKey('Store', null=True)
 
     def __str__(self):
         return self.type
