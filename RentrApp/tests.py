@@ -223,7 +223,7 @@ class StoreListTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         print("Expected Status Code %s" % (status.HTTP_201_CREATED))
         print("Returned Status Code %s" % (response.status_code))
-        self.assertEqual(response.data, data)
+        self.assertEqual(response.data, self.data)
         print(response.data)
 
     # Negative test for creating a store
