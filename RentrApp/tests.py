@@ -384,4 +384,15 @@ class RentalDetailTestCase(APITestCase):
         print("Expected Status Code %s" % (status.HTTP_400_BAD_REQUEST))
         print("Returned Status Code %s" % (response.status_code))
 
+    def test_post(self):
+        url = reverse('rentalList')
+        data = {"rentable":"1",
+                "cusName":"Bipol Alam",
+                "cusPhoneNum":"8502385476",
+                "cusEmail":"bipolalam@gmail.com",
+                "price":"4",
+                "dateDue":"2015/04/24 19:37"}
+        self.client.post(url, data, format='json')
+
+
 

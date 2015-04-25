@@ -3,6 +3,7 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.shortcuts import render_to_response
 from RentrApp.models import Rentable, Store, Rental
 from RentrApp.serializers import RentableSerializer, StoreSerializer, RentalSerializer
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -97,16 +98,20 @@ class RentalList(APIView):
         return Response(serializer.data)
 
     # Creates a new rental
+    @csrf_exempt
     def post(self, request, format='json'):
         serializer = RentalSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            rentableId = request.query_params['rentable']
-            rentableDateDue = request.query_params['dateDue']
-            rentable = Rentable.objects.get(pk=rentableId)
-            rentable.isRented = True
-            rentable.dateDue = rentableDateDue
-            rentable.dateRented = datetime.now()
+            try:
+                rentableId = request.query_params['rentable']
+                rentableDateDue = request.query_params['dateDue']
+                rentable = Rentable.objects.get(pk=rentableId)
+                rentable.isRented = True
+                rentable.dateDue = rentableDateDue
+                rentable.dateRented = datetime.now()
+            except:
+                raise Http404
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
