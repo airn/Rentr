@@ -73,6 +73,20 @@ def make_rental(request, pk):
     context = {"pk": pk}
     return render(request, "rentr/rentable.html", context)
 
+def edit_rental(request, pk):
+    context = Rental.objects.get(pk=pk)
+    print context
+    return render(request, "rentr/rental.html", context)
+
+def return_rental(request, pk):
+    try: 
+        rentable = Rentable.objects.get(pk=pk)
+        rentable.isRented = False
+        rentable.save()
+    except Exception as e:
+        print e
+        return Response(e, status=HTTP_400_BAD_REQUEST) 
+
 #  Store List
 class StoreList(APIView):
 
@@ -109,8 +123,8 @@ class RentalList(APIView):
                 rentable.isRented = True
                 rentable.dateDue = rentableDateDue
                 rentable.dateRented = datetime.now()
-                serializer.save()
                 rentable.save()
+                serializer.save()
             except Exception as e:
                 print e
                 raise Http404
