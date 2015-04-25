@@ -6,6 +6,7 @@ from RentrApp.serializers import RentableSerializer, StoreSerializer, RentalSeri
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from datetime import datetime
 
 # Create your views here.
 
@@ -44,10 +45,12 @@ class RentableDetail(APIView):
         serializer = RentableSerializer(rental)
         return Response(serializer.data)
 
-    # Updates the rentableObject when POST request
+    # Updates the returned rentableObject when POST request
     def post(self, request, pk, format='json'):
-        rental = self.get_object(pk)
-        serializer = RentableSerializer(rental, data=request.data)
+        rentable = self.get_object(pk)
+        rentable.isRented = False
+        rentable.dateReturned = datetime.now()
+        serializer = RentableSerializer(rentable, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -98,6 +101,12 @@ class RentalList(APIView):
         serializer = RentalSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            rentableId = request.query_params['rentable']
+            rentableDateDue = request.query_params['dateDue']
+            rentable = Rentable.objects.get(pk=rentableId)
+            rentable.isRented = True
+            rentable.dateDue = rentableDateDue
+            rentable.dateRented = datetime.now()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -134,3 +143,4 @@ class Rented(APIView):
             rentals = Rentable.objects.filter(isRented=True)
         serializer = RentableSerializer(rentals, many=True)
         return Response(serializer.data)
+

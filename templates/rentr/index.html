@@ -128,13 +128,14 @@
                     "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
                         + "<td name='return-button'></td></tr>"
                 );
+                var url = '/rentable/' + key + '/edit';
                 var $button = $('<button/>', {
 			      type: 'button',
 			      'class': 'btn btn-success',
 			      text: 'Rent',
-			      click: function() {
-				  window.alert('Hello! My id is '+ this.id);
-				    }
+			      click: function()  {
+                      window.location.href = url;
+                  }
 			    });
 			    $button.appendTo('[name="return-button"]:last');
             });
@@ -150,7 +151,7 @@
                 var $button2 = $('<button2/>', {
 			      type: 'button',
 			      'class': 'btn btn-success',
-			      text: 'Rent',
+			      text: 'Return',
 			      click: function() {
 				  window.alert('Hello! My id is '+ this.id);
 				    }
@@ -177,21 +178,19 @@
                 $(".header").append("<h1>" + store.name + "</h1>");
             });
 
-
-
             $.getJSON("/rentable/", { store : store}, function( data ){
                 $(".tableBody").empty();
                 $.each(data, function(key, val){
                     $(".tableBody").append(
                         "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
 			+ "<td name='return-button'></td></tr>");
-
+                var url = '/rentable/' + key + '/edit';
 			    var $button = $('<button/>', {
 			      type: 'button',
 			      'class': 'btn btn-success',
 			      text: 'Rent',
 			      click: function() {
-				  window.alert('Hello! My id is '+ this.id);
+				  window.location.href = url;
 				    }
 			    });
 			    $button.appendTo('[name="return-button"]:last');
@@ -208,7 +207,7 @@
 			    var $button2 = $('<button2/>', {
 			      type: 'button',
 			      'class': 'btn btn-success',
-			      text: 'Rent',
+			      text: 'Return',
 			      click: function() {
 				  window.alert('Hello! My id is '+ this.id);
 				    }
