@@ -75,8 +75,8 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>Store</th>
                                     <th>Type</th>
-                                    <th>Date Due</th>
 				    <th>Rent</th>
                                 </tr>
                             </thead>
@@ -128,8 +128,9 @@
         $.getJSON("/rentable/", function( data ){
             $(".tableBody").empty();
             $.each(_.sortBy(data, "dateDue"), function(key, val){
-                $(".tableBody").append(
-                    "<tr><td>" + val.type + "</td><td>" + moment(val.dateDue).format('MMMM Do YYYY, h:mm a') + "</td>"
+                $.getJSON("/store/" + val.store, function(store){
+                   $(".tableBody").append(
+                    "<tr><td>" + store.name + "</td><td>" + val.type + "</td>"
                         + "<td name='return-button'></td></tr>"
                 );
                 var url = '/rentable/' + val.pk + '/edit';
@@ -142,6 +143,7 @@
                   }
 			    });
 			    $button.appendTo('[name="return-button"]:last');
+                });
             });
         });
 
@@ -187,21 +189,24 @@
 
             $.getJSON("/rentable/", { store : store}, function( data ){
                 $(".tableBody").empty();
-                $.each(data, function(key, val){
-                    $(".tableBody").append(
-                        "<tr><td>" + val.type + "</td><td>" + moment(val.dateDue).format('MMMM Do YYYY, h:mm a') + "</td>"
-			+ "<td name='return-button'></td></tr>");
-			var url = '/rentable/' + val.pk + '/edit';
-			    var $button = $('<button/>', {
-			      type: 'button',
-			      'class': 'btn btn-success',
-			      text: 'Rent',
-			      click: function() {
-				  window.location.href = url;
-				    }
-			    });
-			    $button.appendTo('[name="return-button"]:last');
-                })
+                $.each(_.sortBy(data, "dateDue"), function(key, val){
+                $.getJSON("/store/" + val.store, function(store){
+                   $(".tableBody").append(
+                    "<tr><td>" + store.name + "</td><td>" + val.type + "</td>"
+                        + "<td name='return-button'></td></tr>"
+                    );
+                    var url = '/rentable/' + val.pk + '/edit';
+                    var $button = $('<button/>', {
+                      type: 'button',
+                      'class': 'btn btn-success',
+                      text: 'Rent',
+                      click: function()  {
+                          window.location.href = url;
+                      }
+                    });
+                    $button.appendTo('[name="return-button"]:last');
+                    });
+                });
             });
 
             $.getJSON("/rented/", { store : store}, function( data ){
