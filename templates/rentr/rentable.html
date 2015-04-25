@@ -35,7 +35,7 @@
     <nav class="navbar navbar-inner navbar-fixed-top">
 	<div class="container-fluid">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">
+			<a class="navbar-brand" href="../../../">
 				<div class="header-brand">
 				    <img class="img-responsive" src="{% static "img/rentr-logo-web.png" %}" 
 				    alt="Rentr Logo"> 
@@ -122,6 +122,10 @@
 			            </div>
 			    </form>
 		    </div>
+		    <div class="col-lg-4">
+			    <div id="created_rentable">
+			    </div>
+		    </div>
        </div>
     </div>
     <!-- /#wrapper -->
@@ -163,6 +167,7 @@
             data: data,
             success: function(e){
                 console.log(JSON.stringify(data));
+		$('#created_rentable').append("<h1>Rentable Created</h1>");
             }
 	});
 	console.log(JSON.stringify(data));

@@ -128,7 +128,7 @@
                     "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
                         + "<td name='return-button'></td></tr>"
                 );
-                var url = '/rentable/' + key + '/edit';
+                var url = '/rentable/' + val.pk + '/edit';
                 var $button = $('<button/>', {
 			      type: 'button',
 			      'class': 'btn btn-success',
@@ -186,7 +186,7 @@
                     $(".tableBody").append(
                         "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
 			+ "<td name='return-button'></td></tr>");
-                var url = '/rentable/' + key + '/edit';
+			var url = '/rentable/' + val.pk + '/edit';
 			    var $button = $('<button/>', {
 			      type: 'button',
 			      'class': 'btn btn-success',
