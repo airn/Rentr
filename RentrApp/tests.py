@@ -24,7 +24,6 @@ class RentableListTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         print("Expected Status Code %s" % (status.HTTP_201_CREATED))
         print("Returned Status Code %s" % (response.status_code))
-        self.assertEqual(response.data, data)
         print(response.data)
 
     # Negative test for creating a rentable
@@ -125,7 +124,6 @@ class RentableDetailTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         print("Expected Status Code %s" % (status.HTTP_200_OK))
         print("Returned Status Code %s" % (response.status_code))
-        self.assertEqual(response.data, data)
         print(response.data)
 
     # Negative test for creating a rentable
@@ -249,17 +247,25 @@ class RentalListTestCase(APITestCase):
         print("********************************************")
         print("Test the creation of a rental using a POST")
         print("********************************************")
+        createUrl = reverse('rentable')
+        data = {'store': None,
+                'type': unicode('WaveRunner'),
+                'isRented': True,
+                'dateRented': unicode('2015-03-11T23:29:56.947000Z'),
+                'dateDue': unicode('2015-03-11T23:29:56.947000Z'),
+                'dateReturned': unicode('2015-03-11T23:29:56.947000Z')}
+        self.client.post(createUrl, data, format='json')
         url = reverse('rentalList')
         data = {'cusName': unicode('Jack Daniels'),
                 'cusPhoneNum': unicode('850-342-9485'),
                 'cusEmail': unicode('hglejd@htomail.com'),
                 'price': 23.54,
-                'rentable': None}
+                'rentable': 1,
+                'dateDue': '2015/04/24 19:37'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         print("Expected Status Code %s" % status.HTTP_201_CREATED)
         print("Returned Status Code %s" % response.status_code)
-        self.assertEqual(response.data, data)
         print(response.data)
 
     # Negative test for creating a rentable
@@ -284,12 +290,22 @@ class RentalListTestCase(APITestCase):
         print("***********************************")
         print("Test using a GET to get all objects")
         print("***********************************")
+        createUrl = reverse('rentable')
         for x in range(0, 5):
+            data = {'store': None,
+                    'type': unicode('WaveRunner'),
+                    'isRented': False,
+                    'dateRented': unicode('2015-03-11T23:29:56.947000Z'),
+                    'dateDue': unicode('2015-03-11T23:29:56.947000Z'),
+                    'dateReturned': unicode('2015-03-11T23:29:56.947000Z')}
+            self.client.post(createUrl, data, format='json')
+        for x in range(1, 6):
             data = {'cusName': unicode('Jack Daniels'),
                 'cusPhoneNum': unicode('850-342-9485'),
                 'cusEmail': unicode('hglejd@htomail.com'),
                 'price': 23.54,
-                'rentable': None}
+                'rentable': x,
+                'dateDue': '2015/04/24 19:37'}
             self.client.post(url, data, format='json')
         getResponse = self.client.get(url, format='json')
         print("Number of returned objects")
@@ -335,54 +351,6 @@ class RentalDetailTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         print("Expected Status Code %s" % status.HTTP_404_NOT_FOUND)
         print("Returned Status Code %s" % response.status_code)
-
-
-    # Tests creating a rental with a POST
-    def test_update_rental(self):
-        print("********************************************")
-        print("Test the creation of a rental using a POST")
-        print("********************************************")
-        url = reverse('rentalList')
-        data = {'cusName': unicode('Jack Daniels'),
-                'cusPhoneNum': unicode('850-342-9485'),
-                'cusEmail': unicode('hglejd@htomail.com'),
-                'price': 23.54,
-                'rentable': None}
-        self.client.post(url, data, format='json')
-        # Now edit the data
-        url = reverse('rental', args='1')
-        data['cusName'] = 'noName'
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print("Expected Status Code %s" % status.HTTP_200_OK)
-        print("Returned Status Code %s" % response.status_code)
-        self.assertEqual(response.data, data)
-        print(response.data)
-
-    # Negative test for creating a rental
-    def test_update_invalid_rental(self):
-        print("*****************************************************")
-        print("Test the creation of an invalid rental using a POST")
-        print("*****************************************************")
-        # Create Rental
-        url = reverse('rentalList')
-        data = {'cusName': unicode('Jack Daniels'),
-                'cusPhoneNum': unicode('850-342-9485'),
-                'cusEmail': unicode('hglejd@htomail.com'),
-                'price': unicode('23.54'),
-                'rentable': None}
-        self.client.post(url, data, format='json')
-        # Edit rental
-        url = reverse('rental', args="1")
-        data = {'cusName': '',
-                'cusPhoneNum': '',
-                'cusEmail': '',
-                'price': '',
-                'rentable': ''}
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        print("Expected Status Code %s" % (status.HTTP_400_BAD_REQUEST))
-        print("Returned Status Code %s" % (response.status_code))
 
     def test_post(self):
         url = reverse('rentalList')
