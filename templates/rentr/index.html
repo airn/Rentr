@@ -148,12 +148,13 @@
                     "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
                         + "<td name='return-button2'></td></tr>"
                 );
+                var url = '/rentable/' + val.pk + '/return/';
                 var $button2 = $('<button2/>', {
 			      type: 'button',
 			      'class': 'btn btn-success',
 			      text: 'Return',
 			      click: function() {
-				  window.alert('Hello! My id is '+ this.id);
+				  window.location.href = url;
 				    }
 			    });
 			    $button2.appendTo('[name="return-button2"]:last');
@@ -205,13 +206,13 @@
                     $(".tableBody2").append(
                         "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
 			+ "<td name='return-button2'></td></tr>");
-
+			var url = '/rentable/' + val.pk + '/return/';
 			    var $button2 = $('<button2/>', {
 			      type: 'button',
 			      'class': 'btn btn-success',
 			      text: 'Return',
 			      click: function() {
-				  window.alert('Hello! My id is '+ this.id);
+				  window.location.href = url;
 				    }
 			    });
 			    $button2.appendTo('[name="return-button2"]:last');

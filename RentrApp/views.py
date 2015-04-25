@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.forms import model_to_dict
 from django.utils.datastructures import MultiValueDictKeyError
 from django.shortcuts import render
 from RentrApp.models import Rentable, Store, Rental
@@ -73,19 +74,14 @@ def make_rental(request, pk):
     context = {"pk": pk}
     return render(request, "rentr/rentable.html", context)
 
-def edit_rental(request, pk):
-    context = Rental.objects.get(pk=pk)
-    print context
-    return render(request, "rentr/rental.html", context)
-
 def return_rental(request, pk):
-    try: 
-        rentable = Rentable.objects.get(pk=pk)
-        rentable.isRented = False
-        rentable.save()
-    except Exception as e:
-        print e
-        return Response(e, status=HTTP_400_BAD_REQUEST) 
+    context_dict = {}
+    rentable = Rentable.objects.get(pk=pk)
+    rental = Rental.objects.get(rentable=rentable.pk)
+    context_dict['rentable'] = model_to_dict(rentable)
+    context_dict['rental'] = model_to_dict(rental)
+    print context_dict
+    return render(request, "rentr/rental.html", context_dict)
 
 #  Store List
 class StoreList(APIView):
