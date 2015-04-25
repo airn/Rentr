@@ -70,8 +70,8 @@
 				    <span>Toggle Menu</span>
 			    </button>
 			    <h1 class="col-sm-offset-3"> Create Rental </h1>
-			    <form class="form-horizontal">
-				    <input type="hidden" value={{pk}} name="pk" />
+			    <form class="form-horizontal" id="create-rental">
+				    <input type="hidden" value={{pk}} name="rentable" />
 				    <div class="form-group">
 					    <label for="cusName" class="col-sm-3 control-label"> 
 					    	Customer Name</label>
@@ -106,8 +106,9 @@
 				    </div>
 				    <div class="form-group">
 					    <label for="cusPrice" class="col-sm-3 control-label"> 
-					    	Calendar</label>
+					    	Due Date</label>
 			    		    <div class="col-sm-5">
+						    <input type="text" class="form-control" id="datepicker">
 					    </div>		    
 				    </div>
 				    <div class="form-group col-sm-8">
@@ -132,8 +133,28 @@
     <!-- lodash Core JavaScript -->
     <script src="{% static "js/lodash.js" %}" rel="stylesheet"></script>
 
+    <!-- jquery ui stuff -->
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
     <!-- SideBar GET Store Script -->
     <script>
+    $(function() {
+        $( "#datepicker" ).datepicker();
+    });
+
+    $("#create-rental").on('submit', function() {
+        var data = $(this).serializeArray();
+	$.ajax({
+            url:'/rental',
+            type:'post',
+            dataType:'json',
+            data: data,
+            success: function(e){
+                console.log(JSON.stringify(data));
+            }
+	});
+    });
 
     $("#menu-toggle").click(function(e) {
 	    e.preventDefault();

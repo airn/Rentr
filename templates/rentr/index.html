@@ -178,6 +178,8 @@
                 $(".header").append("<h1>" + store.name + "</h1>");
             });
 
+
+
             $.getJSON("/rentable/", { store : store}, function( data ){
                 $(".tableBody").empty();
                 $.each(data, function(key, val){
