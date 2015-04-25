@@ -89,6 +89,7 @@ def return_action(request, pk):
         rentable = Rentable.objects.get(pk=pk)
         rental = Rental.objects.get(rentable=rentable.pk)
         rentable.isRented = False
+        rentable.dateReturned = datetime.now()
         rentable.save()
         rental.delete()
         return HttpResponse(status.HTTP_200_OK)
