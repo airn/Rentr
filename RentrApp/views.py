@@ -6,6 +6,7 @@ from RentrApp.models import Rentable, Store, Rental
 from RentrApp.serializers import RentableSerializer, StoreSerializer, RentalSerializer
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from datetime import datetime
 
