@@ -13,7 +13,7 @@ from datetime import datetime
 # Rentable List
 class RentableList(APIView):
 
-    # Returns a list of rentables
+    # Returns a list of  rentables
     def get(self, request, format='json'):
         try:
             store = request.query_params['store']
