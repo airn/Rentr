@@ -1,10 +1,8 @@
 from django.http import Http404
-from django.template import Context
 from django.utils.datastructures import MultiValueDictKeyError
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from RentrApp.models import Rentable, Store, Rental
 from RentrApp.serializers import RentableSerializer, StoreSerializer, RentalSerializer
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,7 +23,6 @@ class RentableList(APIView):
         serializer = RentableSerializer(rentals, many=True)
         return Response(serializer.data)
 
-    @csrf_exempt
     # Creates a new rentable
     def post(self, request, format='json'):
         serializer = RentableSerializer(data=request.data)
@@ -48,7 +45,6 @@ class RentableDetail(APIView):
         serializer = RentableSerializer(rental)
         return Response(serializer.data)
 
-    @csrf_exempt
     # Updates the returned rentableObject when POST request
     def post(self, request, pk, format='json'):
         rentable = self.get_object(pk)
@@ -68,15 +64,14 @@ class StoreDetail(APIView):
         except Store.DoesNotExist:
             raise Http404
 
-    @csrf_exempt
     def get(self, request, pk, format='json'):
         store = self.get_object(pk)
         serializer = StoreSerializer(store)
         return Response(serializer.data)
 
 def make_rental(request, pk):
-    context = Context({"pk": pk})
-    return render_to_response("rentr/rentable.html", context)
+    context = {"pk": pk}
+    return render(request, "rentr/rentable.html", context)
 
 #  Store List
 class StoreList(APIView):
@@ -87,7 +82,6 @@ class StoreList(APIView):
         serializer = StoreSerializer(stores, many=True)
         return Response(serializer.data)
 
-    @csrf_exempt
     def post(self, request, format='json'):
         serializer = StoreSerializer(data=request.data)
         if serializer.is_valid():
@@ -104,14 +98,14 @@ class RentalList(APIView):
         return Response(serializer.data)
 
     # Creates a new rental
-    @csrf_exempt
     def post(self, request, format='json'):
+        print request.data
         serializer = RentalSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             try:
-                rentableId = request.query_params['rentable']
-                rentableDateDue = request.query_params['dateDue']
+                rentableId = request.data['rentable']
+                rentableDateDue = request.data['dateDue']
                 rentable = Rentable.objects.get(pk=rentableId)
                 rentable.isRented = True
                 rentable.dateDue = rentableDateDue
@@ -135,7 +129,6 @@ class RentalDetail(APIView):
         serializer = RentalSerializer(rental)
         return Response(serializer.data)
 
-    @csrf_exempt
     # Updates the rental Object when POST request
     def post(self, request, pk, format='json'):
         rental = self.get_object(pk)

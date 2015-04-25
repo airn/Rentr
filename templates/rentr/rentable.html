@@ -71,6 +71,7 @@
 			    </button>
 			    <h1 class="col-sm-offset-3"> Create Rental </h1>
 			    <form class="form-horizontal" id="create-rental">
+				    {% csrf_token %}
 				    <input type="hidden" value={{pk}} name="rentable" />
 				    <div class="form-group">
 					    <label for="cusName" class="col-sm-3 control-label"> 
@@ -156,7 +157,7 @@
 			}
 	});
 	$.ajax({
-            url:'/rental',
+            url:'/rental/',
             type:'post',
             dataType:'json',
             data: data,
