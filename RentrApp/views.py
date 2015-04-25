@@ -102,7 +102,6 @@ class RentalList(APIView):
         print request.data
         serializer = RentalSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
             try:
                 rentableId = request.data['rentable']
                 rentableDateDue = request.data['dateDue']
@@ -110,8 +109,10 @@ class RentalList(APIView):
                 rentable.isRented = True
                 rentable.dateDue = rentableDateDue
                 rentable.dateRented = datetime.now()
+                serializer.save()
                 rentable.save()
-            except:
+            except Exception as e:
+                print e
                 raise Http404
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
