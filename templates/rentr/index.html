@@ -110,6 +110,9 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "js/bootstrap.js" %}" rel="stylesheet"></script>
 
+    <!-- Moment Core JavaScript -->
+    <script src="{% static "js/moment.js" %}" rel="stylesheet"></script>
+
     <!-- lodash Core JavaScript -->
     <script src="{% static "js/lodash.js" %}" rel="stylesheet"></script>
 
@@ -126,7 +129,7 @@
             $(".tableBody").empty();
             $.each(_.sortBy(data, "dateDue"), function(key, val){
                 $(".tableBody").append(
-                    "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
+                    "<tr><td>" + val.type + "</td><td>" + moment(val.dateDue).format('MMMM Do YYYY, h:mm a') + "</td>"
                         + "<td name='return-button'></td></tr>"
                 );
                 var url = '/rentable/' + val.pk + '/edit';
@@ -146,7 +149,7 @@
             $(".tableBody2").empty();
             $.each(_.sortBy(data, "dateDue"), function(key, val){
                 $(".tableBody2").append(
-                    "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
+                    "<tr><td>" + val.type + "</td><td>" + moment(val.dateDue).format('MMMM Do YYYY, h:mm a') + "</td>"
                         + "<td name='return-button2'></td></tr>"
                 );
                 var url = '/rentable/' + val.pk + '/return/';
@@ -186,7 +189,7 @@
                 $(".tableBody").empty();
                 $.each(data, function(key, val){
                     $(".tableBody").append(
-                        "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
+                        "<tr><td>" + val.type + "</td><td>" + moment(val.dateDue).format('MMMM Do YYYY, h:mm a') + "</td>"
 			+ "<td name='return-button'></td></tr>");
 			var url = '/rentable/' + val.pk + '/edit';
 			    var $button = $('<button/>', {
@@ -205,7 +208,7 @@
                 $(".tableBody2").empty();
                 $.each(data, function(key, val){
                     $(".tableBody2").append(
-                        "<tr><td>" + val.type + "</td><td>" + val.dateDue + "</td>"
+                        "<tr><td>" + val.type + "</td><td>" + moment(val.dateDue).format('MMMM Do YYYY, h:mm a') + "</td>"
 			+ "<td name='return-button2'></td></tr>");
 			var url = '/rentable/' + val.pk + '/return/';
 			    var $button2 = $('<button2/>', {
@@ -220,6 +223,9 @@
                 })
             });
         }
+    </script>
+    <script>
+
     </script>
 </body>
 </html>
