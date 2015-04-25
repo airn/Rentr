@@ -110,6 +110,7 @@ class RentalList(APIView):
                 rentable.isRented = True
                 rentable.dateDue = rentableDateDue
                 rentable.dateRented = datetime.now()
+                rentable.save()
             except:
                 raise Http404
             return Response(serializer.data, status=status.HTTP_201_CREATED)
