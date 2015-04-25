@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.template import Context
 from django.utils.datastructures import MultiValueDictKeyError
 from django.shortcuts import render_to_response
 from RentrApp.models import Rentable, Store, Rental
@@ -71,7 +72,8 @@ class StoreDetail(APIView):
         return Response(serializer.data)
 
 def make_rental(request, pk):
-    return render_to_response("rentr/rentable.html", pk)
+    context = Context({"pk": pk})
+    return render_to_response("rentr/rentable.html", context)
 
 #  Store List
 class StoreList(APIView):

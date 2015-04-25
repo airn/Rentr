@@ -76,7 +76,7 @@
 					    <label for="cusName" class="col-sm-3 control-label"> 
 					    	Customer Name</label>
 			    		    <div class="col-sm-5">
-						    <input type="text" class="form-control" 
+						    <input type="text" class="form-control" name="cusName" 
 						    	placeholder="Name">
 					    </div>		    
 				    </div>
@@ -84,7 +84,7 @@
 					    <label for="cusPhone" class="col-sm-3 control-label"> 
 					    	Customer Phone Number</label>
 			    		    <div class="col-sm-5">
-						    <input type="tel" class="form-control" 
+						    <input type="tel" class="form-control" name="cusPhoneNum" 
 						    	placeholder="000 000 0000">
 					    </div>		    
 				    </div>
@@ -92,7 +92,7 @@
 					    <label for="cusEmail" class="col-sm-3 control-label"> 
 					    	Customer Email</label>
 			    		    <div class="col-sm-5">
-						    <input type="email" class="form-control" 
+						    <input type="email" class="form-control" name="cusEmail" 
 						    	placeholder="user@user.com">
 					    </div>		    
 				    </div>
@@ -100,7 +100,7 @@
 					    <label for="cusPrice" class="col-sm-3 control-label"> 
 					    	Price</label>
 			    		    <div class="col-sm-5">
-						    <input type="number" class="form-control" 
+						    <input type="number" class="form-control" name="price" 
 						    	placeholder="0.0">
 					    </div>		    
 				    </div>
@@ -108,7 +108,8 @@
 					    <label for="cusPrice" class="col-sm-3 control-label"> 
 					    	Due Date</label>
 			    		    <div class="col-sm-5">
-						    <input type="text" class="form-control" id="datepicker">
+						    <input type="text" class="form-control" id="datetimepicker" 
+						    name="dateDue" >
 					    </div>		    
 				    </div>
 				    <div class="form-group col-sm-8">
@@ -129,22 +130,31 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static "js/bootstrap.js" %}" rel="stylesheet"></script>
+    <link rel="stylesheet" type="text/css" 
+    href="{% static "css/jquery.datetimepicker.css" %}"/ >
 
     <!-- lodash Core JavaScript -->
     <script src="{% static "js/lodash.js" %}" rel="stylesheet"></script>
-
-    <!-- jquery ui stuff -->
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="{% static "js/jquery.datetimepicker.js" %}"></script>
 
     <!-- SideBar GET Store Script -->
     <script>
     $(function() {
-        $( "#datepicker" ).datepicker();
+        $( "#datetimepicker" ).datetimepicker();
     });
 
     $("#create-rental").on('submit', function() {
-        var data = $(this).serializeArray();
+        var data ={};
+        $(this).serializeArray().map(function(item) {
+			if ( data[item.name] ) {
+				if ( typeof(data[item.name]) === "string" ) {
+					data[item.name] = [data[item.name]];
+				}
+				data[item.name].push(item.value);
+			} else {
+				data[item.name] = item.value;
+			}
+	});
 	$.ajax({
             url:'/rental',
             type:'post',
@@ -154,6 +164,7 @@
                 console.log(JSON.stringify(data));
             }
 	});
+	console.log(JSON.stringify(data));
     });
 
     $("#menu-toggle").click(function(e) {
