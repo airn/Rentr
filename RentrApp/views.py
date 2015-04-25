@@ -1,4 +1,6 @@
 from django.http import Http404
+from django.http import HttpResponse
+import json
 from django.forms import model_to_dict
 from django.utils.datastructures import MultiValueDictKeyError
 from django.shortcuts import render
@@ -85,11 +87,11 @@ def return_rental(request, pk):
 def return_action(request, pk):
     try:
         rentable = Rentable.objects.get(pk=pk)
+        rental = Rental.objects.get(rentable=rentable.pk)
         rentable.isRented = False
         rentable.save()
-        rental = Rental.objects.get(rentable=rentable.pk)
         rental.delete()
-        return status.HTTP_200_OK
+        return HttpResponse(status.HTTP_200_OK)
     except Exception as e:
         print e
         return status.HTTP_400_BAD_REQUEST
