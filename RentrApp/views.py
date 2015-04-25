@@ -6,12 +6,10 @@ from RentrApp.models import Rentable, Store, Rental
 from RentrApp.serializers import RentableSerializer, StoreSerializer, RentalSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from datetime import datetime
 
 # Create your views here.
-
 # Rentable List
 class RentableList(APIView):
 
@@ -130,7 +128,7 @@ class RentalList(APIView):
                 rentableDateDue = request.data['dateDue']
                 rentable = Rentable.objects.get(pk=rentableId)
                 rentable.isRented = True
-                rentable.dateDue = rentableDateDue
+                rentable.dateDue = rentableDateDue.replace("/", "-")
                 rentable.dateRented = datetime.now()
                 rentable.save()
                 serializer.save()
